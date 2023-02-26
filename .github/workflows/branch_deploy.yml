@@ -53,20 +53,20 @@ jobs:
       # Run Terraform init in our working directory
       - name: Terraform init
         if: steps.branch-deploy.outputs.continue == 'true'
-        run: terraform -chdir ${{ matrix.layer }} init
+        run: terraform -chdir=${{ matrix.layer }} init
 
         # If '.deploy noop' was used, run a Terraform plan
       - name: Terraform plan
         if: ${{ steps.branch-deploy.outputs.continue == 'true' && steps.branch-deploy.outputs.noop == 'true' }}
         id: plan
-        run: terraform plan -chdir ${{ matrix.layer }} -no-color
+        run: terraform plan -chdir=${{ matrix.layer }} -no-color
         continue-on-error: true # continue on error as we will handle errors later on
 
         # If '.deploy' was used, run a Terraform apply
       - name: Terraform apply
         if: ${{ steps.branch-deploy.outputs.continue == 'true' && steps.branch-deploy.outputs.noop != 'true' }}
         id: apply
-        run: terraform -chdir ${{ matrix.layer }} apply -no-color -auto-approve
+        run: terraform -chdir=${{ matrix.layer }} apply -no-color -auto-approve
         continue-on-error: true # continue on error as we will handle errors later on
 
         # This step writes the TF plan/apply output to $GITHUB_ENV which the branch-deploy Action will read from and post as a comment on the pull request
