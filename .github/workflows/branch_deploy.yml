@@ -59,7 +59,7 @@ jobs:
       - name: Terraform plan
         if: ${{ steps.branch-deploy.outputs.continue == 'true' && steps.branch-deploy.outputs.noop == 'true' }}
         id: plan
-        run: terraform plan -chdir=${{ matrix.layer }} -no-color
+        run: terraform -chdir=${{ matrix.layer }} plan -no-color
         continue-on-error: true # continue on error as we will handle errors later on
 
         # If '.deploy' was used, run a Terraform apply
